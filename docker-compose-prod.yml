@@ -42,7 +42,7 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
     ports:
-      - '8083:5001'
+      - '80:5001'
     container_name: project_frontend
     networks:
       - sail
