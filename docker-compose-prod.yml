@@ -1,0 +1,52 @@
+version: '3.7'
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    volumes:
+      - ./_tmp/db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: bon-lang-ninja
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - '8080:3306'
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    container_name: project_db
+    networks:
+      - sail
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./api:/server
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - '8082:5000'
+    container_name: project_api
+    networks:
+      - sail
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - '8083:5001'
+    container_name: project_frontend
+    networks:
+      - sail
+
+networks:
+  sail:
+    driver: bridge

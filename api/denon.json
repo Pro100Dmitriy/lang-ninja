@@ -1,0 +1,12 @@
+{
+  "$schema": "https://deno.land/x/denon/schema.json",
+  "scripts": {
+    "start": {
+      "cmd": "deno run --allow-net --allow-read --allow-env --allow-write --unstable main.ts"
+    }
+  },
+  "watcher": {
+    "exts": ["js", "jsx", "ts", "tsx", "json"],
+    "skip": ["*/.git/*"]
+  }
+}
