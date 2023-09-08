@@ -34,6 +34,7 @@ services:
       context: ./api
       dockerfile: Dockerfile
     restart: always
+    platform: linux/arm64/v8
     volumes:
       - ./api:/server
     environment:

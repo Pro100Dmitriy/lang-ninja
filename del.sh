@@ -1,2 +1,2 @@
-docker rmi deno-api
-docker rmi deno-frontend
+docker rmi lang-ninja-api
+docker rmi lang-ninja-frontend
