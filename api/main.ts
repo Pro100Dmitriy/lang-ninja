@@ -1,17 +1,21 @@
 import 'https://deno.land/std@0.201.0/dotenv/load.ts'
-import { Application, Router } from 'https://deno.land/x/oak/mod.ts'
+import { Application } from './deps.ts'
+import router from './router.ts'
 import GraphQLService from './db.ts'
 
 const { PORT } = Deno.env.toObject()
 
 const app = new Application()
-const router = new Router()
 
-router.get( '/', ( { response }: { response: any } ) => {
-	response.body = 'Hello  sdfsdf'
-} )
+console.log( Deno.cwd() )
+const content = await Deno.readTextFile( './test.txt' )
+const content2 = Deno.readTextFileSync( './test.txt' )
+
+console.log( content )
+console.log( content2 )
 
 app.use( router.routes() )
+app.use( router.allowedMethods() )
 
 app.use( async ( ctx, next ) => {
 	await next()
@@ -28,7 +32,8 @@ app.use( async ( ctx, next ) => {
 
 app.use( GraphQLService.routes(), GraphQLService.allowedMethods() )
 
-console.log( `App has been started on port ${ PORT }...` )
-await app.listen( {
-	port: PORT
+app.addEventListener( 'listen', ( { hostname, port, secure } ) => {
+	console.log( `Listening on ${ secure ? 'https://' : 'http://' }${ hostname || 'localhost' }:${ port }...` )
 } )
+
+await app.listen( { port: PORT } )

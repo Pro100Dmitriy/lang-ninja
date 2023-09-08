@@ -7,6 +7,8 @@
   },
   "watcher": {
     "exts": ["js", "jsx", "ts", "tsx", "json"],
-    "skip": ["*/.git/*"]
+    "match": ["**/*.*"],
+    "skip": ["*/.git/*", "Dockerfile"],
+    "legacy": true
   }
 }
