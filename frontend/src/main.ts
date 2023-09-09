@@ -1,5 +1,24 @@
 import { createApp } from 'vue'
-import './style.css'
+import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
+import './assets/sass/styles.sass'
 
-createApp( App ).mount( '#app' )
+const router = createRouter( {
+	history: createWebHistory(),
+	routes: [
+		{
+			name: 'Login',
+			path: '/login',
+			component: () => import( './views/Login.vue' )
+		},
+		{
+			name: 'Dashboard',
+			path: '/',
+			component: () => import( './views/Dashboard.vue' )
+		}
+	]
+} )
+
+createApp( App )
+	.use( router )
+	.mount( '#app' )
