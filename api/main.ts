@@ -1,4 +1,3 @@
-import 'https://deno.land/std@0.201.0/dotenv/load.ts'
 import { Application } from './deps.ts'
 import router from './router.ts'
 import GraphQLService from './db.ts'
@@ -6,13 +5,6 @@ import GraphQLService from './db.ts'
 const { PORT } = Deno.env.toObject()
 
 const app = new Application()
-
-console.log( Deno.cwd() )
-const content = await Deno.readTextFile( './test.txt' )
-const content2 = Deno.readTextFileSync( './test.txt' )
-
-console.log( content )
-console.log( content2 )
 
 app.use( router.routes() )
 app.use( router.allowedMethods() )

@@ -1,53 +1,47 @@
-import { applyGraphQL, gql, GQLError } from "https://deno.land/x/oak_graphql/mod.ts"
-import { Router } from 'https://deno.land/x/oak/mod.ts'
+import { applyGraphQL, Router } from "./deps.ts"
+import mysql from './mysql.ts'
+import schema, { TUser, TWord, TDictionary } from './schema.ts'
 
-
-const types = gql`
-	type User {
-	  firstName: String
-	  lastName: String
+const users: TUser[] = [
+	{
+		id: 1,
+		firstName: 'String',
+		lastName: 'String',
+		email: 'test@gmail.com',
+		words: [],
+		dictionaries: []
 	}
-	
-	input UserInput {
-	  firstName: String
-	  lastName: String
-	}
-	
-	type ResolveType {
-	  done: Boolean
-	}
-	
-	type Query {
-	  getUser(id: String): User 
-	}
-	
-	type Mutation {
-	  setUser(input: UserInput!): ResolveType!
-	}
-`
+]
+const dictionaries: TDictionary[] = []
+const words: TWord[] = []
 
 const resolvers = {
 	Query: {
-		getUser: ( parent: any, { id }: any, context: any, info: any ) => {
-			return {
-				firstName: 'wooseok',
-				lastName: 'lee'
-			}
+		getAllUsers: () => {
+			return users
+		},
+		getUser: ( parent: any, { id }: any, context: any, info: any ): TUser => {
+			console.log( id )
+			return users.find( ( user: TUser ) => user.id === Number( id ) )
 		}
 	},
 	Mutation: {
-		setUser: ( parent: any, { input: { firstName, lastName } }: any, context: any, info: any ) => {
-			console.log( 'input:', firstName, lastName )
-			return {
-				done: true
+		createUser: ( parent: any, data: any, context: any, info: any ) => {
+			const id = Date.now()
+			const user = { id,
+				...data.input
 			}
+
+			users.push( user )
+
+			return user
 		}
 	}
 }
 
 const GraphQLService = await applyGraphQL<Router>( {
 	Router,
-	typeDefs: types,
+	typeDefs: schema,
 	resolvers
 } )
 
